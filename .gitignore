@@ -19,5 +19,5 @@ _site/
 /.quarto/
 *_files/
 
-.vscode
-.claude
+.vscode/
+.claude/
