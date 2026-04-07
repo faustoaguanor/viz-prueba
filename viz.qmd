@@ -2,7 +2,7 @@
 title: "Visualización con Vega Datasets"
 format:
   html:
-    theme: cosmo
+    theme: sandstone
     toc: true
 ---
 
