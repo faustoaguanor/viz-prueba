@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "My Quarto Project"
+  title: "Visualización Analítica"
   navbar:
     left:
       - href: index.qmd

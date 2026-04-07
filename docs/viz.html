@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Visualización con Vega Datasets – My Quarto Project</title>
+<title>Visualización con Vega Datasets – Visualización Analítica</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -107,10 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
 
 </head>
@@ -123,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">My Quarto Project</span>
+    <span class="navbar-title">Visualización Analítica</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -192,7 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="carga-del-dataset-cars" class="level2">
 <h2 class="anchored" data-anchor-id="carga-del-dataset-cars">Carga del dataset Cars</h2>
-<div id="1d867962" class="cell" data-execution_count="1">
+<div id="1f82c9fd" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> vega_datasets <span class="im">import</span> data</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
@@ -209,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="dataframe-primeras-filas" class="level2">
 <h2 class="anchored" data-anchor-id="dataframe-primeras-filas">DataFrame — primeras filas</h2>
-<div id="ab3e2f8f" class="cell" data-execution_count="2">
+<div id="91a556e7" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cars.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -300,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="resumen-estadístico" class="level2">
 <h2 class="anchored" data-anchor-id="resumen-estadístico">Resumen estadístico</h2>
-<div id="0297cf5f" class="cell" data-execution_count="3">
+<div id="4acdf108" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cars.describe()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -410,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="gráfico-1-potencia-vs-millas-por-galón" class="level2">
 <h2 class="anchored" data-anchor-id="gráfico-1-potencia-vs-millas-por-galón">Gráfico 1: Potencia vs Millas por galón</h2>
 <p>Relación entre la potencia del motor (<code>Horsepower</code>) y el rendimiento de combustible (<code>Miles_per_Gallon</code>), coloreado por región de origen.</p>
-<div id="77f4f8a1" class="cell" data-execution_count="4">
+<div id="afbca93d" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(cars).mark_circle(size<span class="op">=</span><span class="dv">60</span>, opacity<span class="op">=</span><span class="fl">0.7</span>).encode(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">"Horsepower:Q"</span>, title<span class="op">=</span><span class="st">"Potencia (HP)"</span>),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">"Miles_per_Gallon:Q"</span>, title<span class="op">=</span><span class="st">"Millas por galón"</span>),</span>
@@ -424,23 +421,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display" data-execution_count="4">
 
 <style>
-  #altair-viz-b8ba26bed22440bda93356e70db62484.vega-embed {
+  #altair-viz-8ab3074cb6b74dd0ba0ada8f2f0a5825.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-b8ba26bed22440bda93356e70db62484.vega-embed details,
-  #altair-viz-b8ba26bed22440bda93356e70db62484.vega-embed details summary {
+  #altair-viz-8ab3074cb6b74dd0ba0ada8f2f0a5825.vega-embed details,
+  #altair-viz-8ab3074cb6b74dd0ba0ada8f2f0a5825.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-b8ba26bed22440bda93356e70db62484"></div>
+<div id="altair-viz-8ab3074cb6b74dd0ba0ada8f2f0a5825"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-b8ba26bed22440bda93356e70db62484") {
-      outputDiv = document.getElementById("altair-viz-b8ba26bed22440bda93356e70db62484");
+    if (outputDiv.id !== "altair-viz-8ab3074cb6b74dd0ba0ada8f2f0a5825") {
+      outputDiv = document.getElementById("altair-viz-8ab3074cb6b74dd0ba0ada8f2f0a5825");
     }
 
     const paths = {
@@ -496,7 +493,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="gráfico-2-distribución-de-cilindros-por-región" class="level2">
 <h2 class="anchored" data-anchor-id="gráfico-2-distribución-de-cilindros-por-región">Gráfico 2: Distribución de cilindros por región</h2>
 <p>Cantidad de vehículos agrupados por número de cilindros y región de origen.</p>
-<div id="928953b6" class="cell" data-execution_count="5">
+<div id="0fbc5668" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(cars).mark_bar().encode(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">"Cylinders:O"</span>, title<span class="op">=</span><span class="st">"Cilindros"</span>),</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">"count():Q"</span>, title<span class="op">=</span><span class="st">"Cantidad de autos"</span>),</span>
@@ -511,23 +508,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display" data-execution_count="5">
 
 <style>
-  #altair-viz-51c8bb21891b4965849b2217a88b8abe.vega-embed {
+  #altair-viz-bc62ac29fd3a491fa390421f13e039d9.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-51c8bb21891b4965849b2217a88b8abe.vega-embed details,
-  #altair-viz-51c8bb21891b4965849b2217a88b8abe.vega-embed details summary {
+  #altair-viz-bc62ac29fd3a491fa390421f13e039d9.vega-embed details,
+  #altair-viz-bc62ac29fd3a491fa390421f13e039d9.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-51c8bb21891b4965849b2217a88b8abe"></div>
+<div id="altair-viz-bc62ac29fd3a491fa390421f13e039d9"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-51c8bb21891b4965849b2217a88b8abe") {
-      outputDiv = document.getElementById("altair-viz-51c8bb21891b4965849b2217a88b8abe");
+    if (outputDiv.id !== "altair-viz-bc62ac29fd3a491fa390421f13e039d9") {
+      outputDiv = document.getElementById("altair-viz-bc62ac29fd3a491fa390421f13e039d9");
     }
 
     const paths = {

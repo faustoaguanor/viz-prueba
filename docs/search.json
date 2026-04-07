@@ -44,22 +44,50 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "Acerca del proyecto",
     "section": "",
-    "text": "About this project\nThis page contains additional information about the site."
+    "text": "Este sitio es el resultado de la Clase 3 del curso de Visualización Analítica, parte de la Maestría en Ciencia de Datos.\n\n\nExplorar herramientas modernas de visualización de datos en Python, con énfasis en gráficos interactivos que permiten comunicar hallazgos de forma clara y efectiva.\n\n\n\n\nQuarto — generación del sitio web estático\nPython — lenguaje principal de análisis\nAltair — visualizaciones declarativas basadas en Vega-Lite\nVega Datasets — conjuntos de datos listos para explorar\nPandas — manipulación y análisis de datos\n\n\n\n\nProyecto desarrollado por Alejandro como parte del programa de Maestría en Ciencia de Datos.\n\nEl código fuente está disponible en el repositorio del curso."
+  },
+  {
+    "objectID": "about.html#objetivo",
+    "href": "about.html#objetivo",
+    "title": "Acerca del proyecto",
+    "section": "",
+    "text": "Explorar herramientas modernas de visualización de datos en Python, con énfasis en gráficos interactivos que permiten comunicar hallazgos de forma clara y efectiva."
+  },
+  {
+    "objectID": "about.html#tecnologías-utilizadas",
+    "href": "about.html#tecnologías-utilizadas",
+    "title": "Acerca del proyecto",
+    "section": "",
+    "text": "Quarto — generación del sitio web estático\nPython — lenguaje principal de análisis\nAltair — visualizaciones declarativas basadas en Vega-Lite\nVega Datasets — conjuntos de datos listos para explorar\nPandas — manipulación y análisis de datos"
+  },
+  {
+    "objectID": "about.html#autor",
+    "href": "about.html#autor",
+    "title": "Acerca del proyecto",
+    "section": "",
+    "text": "Proyecto desarrollado por Alejandro como parte del programa de Maestría en Ciencia de Datos.\n\nEl código fuente está disponible en el repositorio del curso."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Home",
+    "title": "Bienvenido",
     "section": "",
-    "text": "This is the home page of my Quarto project.\n\n\n\nAdd more pages\nCustomize the theme\nPublish the project"
+    "text": "Este sitio fue construido con Quarto como parte de la Maestría en Ciencia de Datos. Aquí exploro datos reales usando Python y librerías de visualización como Altair, transformando números en historias visuales que facilitan la comprensión de patrones y tendencias.\n\n\n\nVisualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar\n\n\n\n\n\n\n\nSección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
   },
   {
-    "objectID": "index.html#next-steps",
-    "href": "index.html#next-steps",
-    "title": "Home",
+    "objectID": "index.html#qué-encontrarás-aquí",
+    "href": "index.html#qué-encontrarás-aquí",
+    "title": "Bienvenido",
     "section": "",
-    "text": "Add more pages\nCustomize the theme\nPublish the project"
+    "text": "Visualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar"
+  },
+  {
+    "objectID": "index.html#navegación",
+    "href": "index.html#navegación",
+    "title": "Bienvenido",
+    "section": "",
+    "text": "Sección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
   }
 ]

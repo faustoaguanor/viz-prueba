@@ -1,7 +1,27 @@
 ---
-title: "About"
+title: "Acerca del proyecto"
 ---
 
-# About this project
+# Sobre este proyecto
 
-This page contains additional information about the site.
+Este sitio es el resultado de la **Clase 3** del curso de Visualización Analítica, parte de la Maestría en Ciencia de Datos.
+
+## Objetivo
+
+Explorar herramientas modernas de visualización de datos en Python, con énfasis en gráficos interactivos que permiten comunicar hallazgos de forma clara y efectiva.
+
+## Tecnologías utilizadas
+
+- **Quarto** — generación del sitio web estático
+- **Python** — lenguaje principal de análisis
+- **Altair** — visualizaciones declarativas basadas en Vega-Lite
+- **Vega Datasets** — conjuntos de datos listos para explorar
+- **Pandas** — manipulación y análisis de datos
+
+## Autor
+
+Proyecto desarrollado por **Alejandro** como parte del programa de Maestría en Ciencia de Datos.
+
+---
+
+El código fuente está disponible en el repositorio del curso.

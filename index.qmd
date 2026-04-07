@@ -1,13 +1,24 @@
 ---
-title: "Home"
+title: "Bienvenido"
 ---
 
-# Welcome
+# Mi proyecto de Visualización Analítica
 
-This is the home page of my Quarto project.
+Este sitio fue construido con **Quarto** como parte de la Maestría en Ciencia de Datos. Aquí exploro datos reales usando Python y librerías de visualización como **Altair**, transformando números en historias visuales que facilitan la comprensión de patrones y tendencias.
 
-## Next steps
+## ¿Qué encontrarás aquí?
 
-- Add more pages
-- Customize the theme
-- Publish the project
+- **Visualizaciones interactivas** construidas con Altair y Vega
+- **Análisis exploratorio** de datasets clásicos de ciencia de datos
+- **Código reproducible** en Python, listo para inspeccionar y adaptar
+
+## Navegación
+
+| Sección | Descripción |
+|---|---|
+| [Visualización](viz.qmd) | Gráficos interactivos del dataset Cars |
+| [Acerca de](about.qmd) | Contexto del proyecto y del autor |
+
+---
+
+> "Un buen gráfico vale más que mil filas de datos."
