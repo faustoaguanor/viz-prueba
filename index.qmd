@@ -1,0 +1,13 @@
+---
+title: "Home"
+---
+
+# Welcome
+
+This is the home page of my Quarto project.
+
+## Next steps
+
+- Add more pages
+- Customize the theme
+- Publish the project

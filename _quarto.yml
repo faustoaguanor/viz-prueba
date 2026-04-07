@@ -1,0 +1,19 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "My Quarto Project"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+      - href: viz.qmd
+        text: Visualización
+
+format:
+  html:
+    theme: cosmo
+    toc: true

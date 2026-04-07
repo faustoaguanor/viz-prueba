@@ -1,0 +1,68 @@
+---
+title: "Visualización con Vega Datasets"
+format:
+  html:
+    theme: cosmo
+    toc: true
+---
+
+## Carga del dataset Cars
+
+```{python}
+from vega_datasets import data
+import pandas as pd
+import altair as alt
+
+# Cargar el dataset cars desde vega_datasets
+cars = data.cars()
+
+# Vista del tipo de objeto
+type(cars)
+```
+
+## DataFrame — primeras filas
+
+```{python}
+cars.head()
+```
+
+## Resumen estadístico
+
+```{python}
+cars.describe()
+```
+
+## Gráfico 1: Potencia vs Millas por galón
+
+Relación entre la potencia del motor (`Horsepower`) y el rendimiento de combustible (`Miles_per_Gallon`), coloreado por región de origen.
+
+```{python}
+alt.Chart(cars).mark_circle(size=60, opacity=0.7).encode(
+    x=alt.X("Horsepower:Q", title="Potencia (HP)"),
+    y=alt.Y("Miles_per_Gallon:Q", title="Millas por galón"),
+    color=alt.Color("Origin:N", title="Origen"),
+    tooltip=["Name:N", "Horsepower:Q", "Miles_per_Gallon:Q", "Origin:N"]
+).properties(
+    title="Potencia vs Rendimiento por región",
+    width=600,
+    height=400
+).interactive()
+```
+
+## Gráfico 2: Distribución de cilindros por región
+
+Cantidad de vehículos agrupados por número de cilindros y región de origen.
+
+```{python}
+alt.Chart(cars).mark_bar().encode(
+    x=alt.X("Cylinders:O", title="Cilindros"),
+    y=alt.Y("count():Q", title="Cantidad de autos"),
+    color=alt.Color("Origin:N", title="Origen"),
+    xOffset="Origin:N",
+    tooltip=["Cylinders:O", "Origin:N", "count():Q"]
+).properties(
+    title="Distribución de cilindros por región",
+    width=600,
+    height=400
+)
+```
