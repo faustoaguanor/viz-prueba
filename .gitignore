@@ -18,3 +18,6 @@ _site/
 .quarto/
 /.quarto/
 *_files/
+
+.vscode
+.claude
