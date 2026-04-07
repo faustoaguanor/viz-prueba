@@ -1,9 +1,5 @@
 ---
 title: "Visualización con Vega Datasets"
-format:
-  html:
-    theme: sandstone
-    toc: true
 ---
 
 ## Carga del dataset Cars

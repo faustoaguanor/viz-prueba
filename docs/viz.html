@@ -189,7 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="carga-del-dataset-cars" class="level2">
 <h2 class="anchored" data-anchor-id="carga-del-dataset-cars">Carga del dataset Cars</h2>
-<div id="30b982ee" class="cell" data-execution_count="1">
+<div id="8bb86c20" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> vega_datasets <span class="im">import</span> data</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
@@ -199,16 +199,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Vista del tipo de objeto</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(cars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>pandas.DataFrame</code></pre>
 </div>
 </div>
 </section>
 <section id="dataframe-primeras-filas" class="level2">
 <h2 class="anchored" data-anchor-id="dataframe-primeras-filas">DataFrame — primeras filas</h2>
-<div id="c61864f6" class="cell" data-execution_count="2">
+<div id="35307a1d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cars.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 
 
@@ -297,9 +297,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="resumen-estadístico" class="level2">
 <h2 class="anchored" data-anchor-id="resumen-estadístico">Resumen estadístico</h2>
-<div id="e7fba409" class="cell" data-execution_count="3">
+<div id="123602c1" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cars.describe()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -407,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="gráfico-1-potencia-vs-millas-por-galón" class="level2">
 <h2 class="anchored" data-anchor-id="gráfico-1-potencia-vs-millas-por-galón">Gráfico 1: Potencia vs Millas por galón</h2>
 <p>Relación entre la potencia del motor (<code>Horsepower</code>) y el rendimiento de combustible (<code>Miles_per_Gallon</code>), coloreado por región de origen.</p>
-<div id="d3ed16a9" class="cell" data-execution_count="4">
+<div id="041b0c16" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(cars).mark_circle(size<span class="op">=</span><span class="dv">60</span>, opacity<span class="op">=</span><span class="fl">0.7</span>).encode(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">"Horsepower:Q"</span>, title<span class="op">=</span><span class="st">"Potencia (HP)"</span>),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">"Miles_per_Gallon:Q"</span>, title<span class="op">=</span><span class="st">"Millas por galón"</span>),</span>
@@ -418,26 +418,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">600</span>,</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">400</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>).interactive()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="14">
 
 <style>
-  #altair-viz-a41f36c56bc04ab7878ef3cb22fc883e.vega-embed {
+  #altair-viz-d7c2d284892a407f9c9d4bdbf2770c96.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-a41f36c56bc04ab7878ef3cb22fc883e.vega-embed details,
-  #altair-viz-a41f36c56bc04ab7878ef3cb22fc883e.vega-embed details summary {
+  #altair-viz-d7c2d284892a407f9c9d4bdbf2770c96.vega-embed details,
+  #altair-viz-d7c2d284892a407f9c9d4bdbf2770c96.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-a41f36c56bc04ab7878ef3cb22fc883e"></div>
+<div id="altair-viz-d7c2d284892a407f9c9d4bdbf2770c96"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-a41f36c56bc04ab7878ef3cb22fc883e") {
-      outputDiv = document.getElementById("altair-viz-a41f36c56bc04ab7878ef3cb22fc883e");
+    if (outputDiv.id !== "altair-viz-d7c2d284892a407f9c9d4bdbf2770c96") {
+      outputDiv = document.getElementById("altair-viz-d7c2d284892a407f9c9d4bdbf2770c96");
     }
 
     const paths = {
@@ -493,7 +493,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="gráfico-2-distribución-de-cilindros-por-región" class="level2">
 <h2 class="anchored" data-anchor-id="gráfico-2-distribución-de-cilindros-por-región">Gráfico 2: Distribución de cilindros por región</h2>
 <p>Cantidad de vehículos agrupados por número de cilindros y región de origen.</p>
-<div id="28d648f1" class="cell" data-execution_count="5">
+<div id="fbdfdfe3" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(cars).mark_bar().encode(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">"Cylinders:O"</span>, title<span class="op">=</span><span class="st">"Cilindros"</span>),</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">"count():Q"</span>, title<span class="op">=</span><span class="st">"Cantidad de autos"</span>),</span>
@@ -505,26 +505,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">600</span>,</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">400</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="15">
 
 <style>
-  #altair-viz-25c0ac0e13384f889f1d439c8028e452.vega-embed {
+  #altair-viz-94e6f594a35c497fa46003d3aa3ba84f.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-25c0ac0e13384f889f1d439c8028e452.vega-embed details,
-  #altair-viz-25c0ac0e13384f889f1d439c8028e452.vega-embed details summary {
+  #altair-viz-94e6f594a35c497fa46003d3aa3ba84f.vega-embed details,
+  #altair-viz-94e6f594a35c497fa46003d3aa3ba84f.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-25c0ac0e13384f889f1d439c8028e452"></div>
+<div id="altair-viz-94e6f594a35c497fa46003d3aa3ba84f"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-25c0ac0e13384f889f1d439c8028e452") {
-      outputDiv = document.getElementById("altair-viz-25c0ac0e13384f889f1d439c8028e452");
+    if (outputDiv.id !== "altair-viz-94e6f594a35c497fa46003d3aa3ba84f") {
+      outputDiv = document.getElementById("altair-viz-94e6f594a35c497fa46003d3aa3ba84f");
     }
 
     const paths = {
