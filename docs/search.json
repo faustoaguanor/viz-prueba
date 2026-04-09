@@ -4,14 +4,14 @@
     "href": "viz.html",
     "title": "Visualización con Vega Datasets",
     "section": "",
-    "text": "from vega_datasets import data\nimport pandas as pd\nimport altair as alt\n\n# Cargar el dataset cars desde vega_datasets\ncars = data.cars()\n\n# Vista del tipo de objeto\ntype(cars)\n\npandas.DataFrame"
+    "text": "from vega_datasets import data\nimport pandas as pd\nimport altair as alt\n\n# ELiminar limitante de registros de altair\nalt.data_transformers.disable_max_rows()\n\n\n# Cargar el dataset cars desde vega_datasets\ncars = data.cars()\n\n# Vista del tipo de objeto\ntype(cars)\n\npandas.DataFrame"
   },
   {
     "objectID": "viz.html#carga-del-dataset-cars",
     "href": "viz.html#carga-del-dataset-cars",
     "title": "Visualización con Vega Datasets",
     "section": "",
-    "text": "from vega_datasets import data\nimport pandas as pd\nimport altair as alt\n\n# Cargar el dataset cars desde vega_datasets\ncars = data.cars()\n\n# Vista del tipo de objeto\ntype(cars)\n\npandas.DataFrame"
+    "text": "from vega_datasets import data\nimport pandas as pd\nimport altair as alt\n\n# ELiminar limitante de registros de altair\nalt.data_transformers.disable_max_rows()\n\n\n# Cargar el dataset cars desde vega_datasets\ncars = data.cars()\n\n# Vista del tipo de objeto\ntype(cars)\n\npandas.DataFrame"
   },
   {
     "objectID": "viz.html#dataframe-primeras-filas",
@@ -32,14 +32,77 @@
     "href": "viz.html#gráfico-1-potencia-vs-millas-por-galón",
     "title": "Visualización con Vega Datasets",
     "section": "Gráfico 1: Potencia vs Millas por galón",
-    "text": "Gráfico 1: Potencia vs Millas por galón\nRelación entre la potencia del motor (Horsepower) y el rendimiento de combustible (Miles_per_Gallon), coloreado por región de origen.\n\nalt.Chart(cars).mark_circle(size=60, opacity=0.7).encode(\n    x=alt.X(\"Horsepower:Q\", title=\"Potencia (HP)\"),\n    y=alt.Y(\"Miles_per_Gallon:Q\", title=\"Millas por galón\"),\n    color=alt.Color(\"Origin:N\", title=\"Origen\"),\n    tooltip=[\"Name:N\", \"Horsepower:Q\", \"Miles_per_Gallon:Q\", \"Origin:N\"]\n).properties(\n    title=\"Potencia vs Rendimiento por región\",\n    width=600,\n    height=400\n).interactive()"
+    "text": "Gráfico 1: Potencia vs Millas por galón\nRelación entre la potencia del motor (Horsepower) y el rendimiento de combustible (Miles_per_Gallon), coloreado por región de origen.\n\nscatterplot = alt.Chart(cars).mark_circle(size=60, opacity=0.7).encode(\n        x=alt.X(\"Horsepower:Q\", title=\"Potencia (HP)\"),\n        y=alt.Y(\"Miles_per_Gallon:Q\", title=\"Millas por galón\"),\n        color=alt.Color(\"Origin:N\", title=\"Origen\"),\n        tooltip=[\"Name:N\", \"Horsepower:Q\", \"Miles_per_Gallon:Q\", \"Origin:N\"],\n    ).properties(title=\"Potencia vs Rendimiento por región\", width=600, height=400).interactive()\n\nscatterplot"
   },
   {
     "objectID": "viz.html#gráfico-2-distribución-de-cilindros-por-región",
     "href": "viz.html#gráfico-2-distribución-de-cilindros-por-región",
     "title": "Visualización con Vega Datasets",
     "section": "Gráfico 2: Distribución de cilindros por región",
-    "text": "Gráfico 2: Distribución de cilindros por región\nCantidad de vehículos agrupados por número de cilindros y región de origen.\n\nalt.Chart(cars).mark_bar().encode(\n    x=alt.X(\"Cylinders:O\", title=\"Cilindros\"),\n    y=alt.Y(\"count():Q\", title=\"Cantidad de autos\"),\n    color=alt.Color(\"Origin:N\", title=\"Origen\"),\n    xOffset=\"Origin:N\",\n    tooltip=[\"Cylinders:O\", \"Origin:N\", \"count():Q\"]\n).properties(\n    title=\"Distribución de cilindros por región\",\n    width=600,\n    height=400\n)"
+    "text": "Gráfico 2: Distribución de cilindros por región\nCantidad de vehículos agrupados por número de cilindros y región de origen.\n\nalt.Chart(cars).mark_bar().encode(\n    x=alt.X(\"Cylinders:O\", title=\"Cilindros\"),\n    y=alt.Y(\"count():Q\", title=\"Cantidad de autos\"),\n    color=alt.Color(\"Origin:N\", title=\"Origen\"),\n    xOffset=\"Origin:N\",\n    tooltip=[\"Cylinders:O\", \"Origin:N\", \"count():Q\"]\n).properties(\n    title=\"Distribución de cilindros por región\",\n    width=600,\n    height=400\n)\n\n\n\n\n\n\n\nScatter Plot Ejemplo\n\n#guardar scatterplot to html\nscatterplot.save('scatterplot.html')\n\nCrear una visualización de puntos y una de lineas y unirlas usando el signo “+” con year en x y max miles per gallon en y\n\npuntos = alt.Chart(cars).mark_point().encode(\n    x=alt.X(\"Year:O\", title=\"Año\"),\n    y='mean(Miles_per_Gallon):Q',\n    color=alt.Color(\"Origin:N\", title=\"Origen\"),\n    tooltip=[\"Name:N\", \"Year:O\", \"Miles_per_Gallon:Q\", \"Origin:N\"]\n)\n\nlineas = alt.Chart(cars).mark_line().encode(\n    x=alt.X(\"Year:O\", title=\"Año\"),\n    y='mean(Miles_per_Gallon):Q',\n    color=alt.Color(\"Origin:N\", title=\"Origen\"),\n    tooltip=[\"Year:O\", \"mean(Miles_per_Gallon):Q\"]\n\n)\n\npuntos + lineas\n\n\n\n\n\n\n\nOtra forma es sobre escribir una gráfica ya hecha\n\npuntos_2 = lineas.mark_point()\npuntos_2"
+  },
+  {
+    "objectID": "viz.html#cargar-otro-dataset",
+    "href": "viz.html#cargar-otro-dataset",
+    "title": "Visualización con Vega Datasets",
+    "section": "Cargar otro dataset",
+    "text": "Cargar otro dataset\n\ngm_url = pd.read_csv(\"https://raw.githubusercontent.com/erickedu85/dataset/master/world-data-gapminder.csv\", parse_dates=['year'])\ngm_url.head()\ngm_url.info()\n\n&lt;class 'pandas.DataFrame'&gt;\nRangeIndex: 38982 entries, 0 to 38981\nData columns (total 14 columns):\n #   Column                 Non-Null Count  Dtype         \n---  ------                 --------------  -----         \n 0   country                38982 non-null  str           \n 1   year                   38982 non-null  datetime64[us]\n 2   population             38982 non-null  int64         \n 3   region                 38982 non-null  str           \n 4   sub_region             38982 non-null  str           \n 5   income_group           38982 non-null  str           \n 6   life_expectancy        38982 non-null  float64       \n 7   income                 38982 non-null  int64         \n 8   children_per_woman     38982 non-null  float64       \n 9   child_mortality        38980 non-null  float64       \n 10  pop_density            12282 non-null  float64       \n 11  co2_per_capita         16285 non-null  float64       \n 12  years_in_school_men    8188 non-null   float64       \n 13  years_in_school_women  8188 non-null   float64       \ndtypes: datetime64[us](1), float64(7), int64(2), str(4)\nmemory usage: 4.2 MB"
+  },
+  {
+    "objectID": "viz.html#gráfico-lineal-de-la-población",
+    "href": "viz.html#gráfico-lineal-de-la-población",
+    "title": "Visualización con Vega Datasets",
+    "section": "Gráfico lineal de la población",
+    "text": "Gráfico lineal de la población\n\nalt.Chart(gm_url).mark_line().encode(\n    x=alt.X(\"year\", title=\"Año\"),\n    y=alt.Y(\"sum(population):Q\", title=\"Población\")\n).properties(width=600, height=400)\n\n\n\n\n\n\n\n\nalt.Chart(gm_url).mark_area().encode(\n    x=alt.X(\"year\", title=\"Año\"),\n    y=alt.Y(\"sum(population):Q\", title=\"Población\")\n).properties(width=600, height=400  )\n\n\n\n\n\n\n\n\nalt.Chart(gm_url).mark_area().encode(\n    x=alt.X(\"year\", title=\"Año\"),\n    y=alt.Y(\"sum(population):Q\", title=\"Población\"), \n    color=alt.Color(\"region:N\", title=\"Región\")\n).properties(width=600, height=400  )"
+  },
+  {
+    "objectID": "viz.html#grafico-de-lineas-y-áreas-de-la-población",
+    "href": "viz.html#grafico-de-lineas-y-áreas-de-la-población",
+    "title": "Visualización con Vega Datasets",
+    "section": "Grafico de lineas y áreas de la población",
+    "text": "Grafico de lineas y áreas de la población\n\nlineas_pob= alt.Chart(gm_url).mark_line().encode(\n    x=alt.X(\"year\", title=\"Año\"),\n    y=alt.Y(\"sum(population):Q\", title=\"Población\"), \n    color=alt.Color(\"region:N\", title=\"Región\")\n).properties(width=600, height=400  )\n\nlineas_pob\n\n\n\n\n\n\n\n\nareas_pob= lineas_pob.mark_area()\n\nlineas_pob | areas_pob"
+  },
+  {
+    "objectID": "viz.html#gráfico-children-por-woman",
+    "href": "viz.html#gráfico-children-por-woman",
+    "title": "Visualización con Vega Datasets",
+    "section": "Gráfico children por woman",
+    "text": "Gráfico children por woman\n\narea_children = alt.Chart(gm_url).mark_area().encode(\n    x=alt.X(\"year\", title=\"Año\"),\n    y=alt.Y(\"mean(children_per_woman):Q\", title=\"Hijos por mujer\"),\n    color=alt.Color(\"region:N\", title=\"Región\")\n).properties(width=500, height=300)\n\nlinea_children = area_children.mark_line()\n\narea_children | linea_children"
+  },
+  {
+    "objectID": "viz.html#filtrar-el-dataset-para-el-año-2018",
+    "href": "viz.html#filtrar-el-dataset-para-el-año-2018",
+    "title": "Visualización con Vega Datasets",
+    "section": "Filtrar el dataset para el año 2018",
+    "text": "Filtrar el dataset para el año 2018\n\ngm_url_2018 = gm_url[gm_url[\"year\"].dt.year == 2018]\ngm_url_2018.head()\n\n\n\n\n\n\n\n\ncountry\nyear\npopulation\nregion\nsub_region\nincome_group\nlife_expectancy\nincome\nchildren_per_woman\nchild_mortality\npop_density\nco2_per_capita\nyears_in_school_men\nyears_in_school_women\n\n\n\n\n218\nAfghanistan\n2018-01-01\n36400000\nAsia\nSouthern Asia\nLow\n58.7\n1870\n4.33\n65.90\n55.7\nNaN\nNaN\nNaN\n\n\n437\nAlbania\n2018-01-01\n2930000\nEurope\nSouthern Europe\nUpper middle\n78.0\n12400\n1.71\n12.90\n107.0\nNaN\nNaN\nNaN\n\n\n656\nAlgeria\n2018-01-01\n42000000\nAfrica\nNorthern Africa\nUpper middle\n77.9\n13700\n2.64\n23.10\n17.6\nNaN\nNaN\nNaN\n\n\n875\nAngola\n2018-01-01\n30800000\nAfrica\nSub-Saharan Africa\nLower middle\n65.2\n5850\n5.55\n81.60\n24.7\nNaN\nNaN\nNaN\n\n\n1094\nAntigua and Barbuda\n2018-01-01\n103000\nAmericas\nLatin America and the Caribbean\nHigh\n77.6\n21000\n2.03\n7.89\n234.0\nNaN\nNaN\nNaN"
+  },
+  {
+    "objectID": "viz.html#crear-gráfico-de-barras-de-la-población-por-continente",
+    "href": "viz.html#crear-gráfico-de-barras-de-la-población-por-continente",
+    "title": "Visualización con Vega Datasets",
+    "section": "Crear gráfico de barras de la población por continente",
+    "text": "Crear gráfico de barras de la población por continente\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"sum(population):Q\", axis=alt.Axis(format=\".3s\"), title=\"Población\"),\n    y=alt.Y(\"region:N\", title=\"Región\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"region:N\", title=\"Región\"),\n        alt.Tooltip(\"sum(population):Q\", title=\"Población\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"region:N\", title=\"Región\", sort=\"-y\"),\n    y=alt.Y(\"count():Q\", axis=alt.Axis(format=\".3s\"), title=\"Población\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"region:N\", title=\"Región\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países: \"),\n    ],\n).properties(width=500, height=300)"
+  },
+  {
+    "objectID": "viz.html#histogramas",
+    "href": "viz.html#histogramas",
+    "title": "Visualización con Vega Datasets",
+    "section": "Histogramas",
+    "text": "Histogramas\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"children_per_woman:Q\", title=\"Hijos por mujer\",\n            bin=alt.Bin(maxbins=30)),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"children_per_woman:Q\", title=\"Hijos por mujer\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)"
+  },
+  {
+    "objectID": "viz.html#histograma-de-expectativa-de-vida",
+    "href": "viz.html#histograma-de-expectativa-de-vida",
+    "title": "Visualización con Vega Datasets",
+    "section": "Histograma de expectativa de vida",
+    "text": "Histograma de expectativa de vida\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\", bin=alt.Bin(maxbins=30)),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\",\n            bin=alt.BinParams(step=5)),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)"
+  },
+  {
+    "objectID": "viz.html#calculo-del-número-de-bins",
+    "href": "viz.html#calculo-del-número-de-bins",
+    "title": "Visualización con Vega Datasets",
+    "section": "Calculo del número de bins",
+    "text": "Calculo del número de bins\nRegla de la raíz cuadrada\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna()\nn = len(datos)\nk_raiz = (math.sqrt(n)).__round__()\nmin_raiz = float(datos.min())\nmax_raiz = float(datos.max())\nstep_raiz = (max_raiz - min_raiz) / k_raiz\nprint(\"Bins:\", k_raiz, \"- Step:\", step_raiz)\n\nBins: 13 - Step: 2.5461538461538464\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\n        \"life_expectancy:Q\",\n        title=\"Expectativa de vida\",\n        bin=alt.BinParams(step=step_raiz, extent=[min_raiz, max_raiz]),\n    ),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\nRegla de Sturges\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna().to_list()\nn = len(datos)\nk_sturges = (1 + math.log2(n)).__round__()\nmin_sturges = min(datos)\nmax_sturges = max(datos)\nstep_sturges = (max_sturges - min_sturges) / k_sturges\nprint(\"Bins:\", k_sturges, \"- Step:\", step_sturges)\n\nBins: 8 - Step: 4.1375\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\",\n            bin=alt.BinParams(step=step_sturges, extent=[min_sturges, max_sturges])),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\nFreedman - Diaconis\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna()\nn = len(datos)\n\n# Cálculo del Rango Intercuartílico (IQR)\nq1 = datos.quantile(0.25)\nq3 = datos.quantile(0.75)\niqr = q3 - q1\n\n# Regla de Freedman-Diaconis para el ancho y número de bins\nmin_fd = float(datos.min())\nmax_fd = float(datos.max())\nbin_width = 2 * iqr / (n ** (1 / 3))\nrango = max_fd - min_fd\nk_fd = math.ceil(rango / bin_width)\nprint(\"Bins:\", k_fd, \"- Step:\", bin_width)\n\nBins: 9 - Step: 3.937619343136572\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\",\n            bin=alt.BinParams(step=bin_width, extent=[min_fd, max_fd])),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)"
   },
   {
     "objectID": "about.html",

@@ -2,16 +2,17 @@
 title: "Visualización con Vega Datasets"
 ---
 
-## ELiminar limitante de registros de altair
-```{python}
-alt.data_transformers.disable_max_rows()
-```
+
 ## Carga del dataset Cars
 
 ```{python}
 from vega_datasets import data
 import pandas as pd
 import altair as alt
+
+# ELiminar limitante de registros de altair
+alt.data_transformers.disable_max_rows()
+
 
 # Cargar el dataset cars desde vega_datasets
 cars = data.cars()
