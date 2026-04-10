@@ -12,6 +12,10 @@ website:
         text: Acerca de
       - href: viz.qmd
         text: Visualización
+      - href: univariate.qmd
+        text: Analisis Univariado
+      - href: bivariate.qmd
+        text: Analisis Bivariado
 
 format:
   html:

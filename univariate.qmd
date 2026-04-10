@@ -1,0 +1,92 @@
+---
+title: "Análisis Univariado"
+---
+
+#  Cargar Librerías
+```{python}
+from vega_datasets import data
+import pandas as pd
+import altair as alt
+
+# ELiminar limitante de registros de altair
+alt.data_transformers.disable_max_rows()
+
+```
+
+# Cargar dataset de movies  
+
+```{python}
+movies = pd.read_csv(
+    "https://raw.githubusercontent.com/erickedu85/dataset/master/movies.csv"
+)
+
+movies.head()
+```
+
+# Single-Axis plot
+```{python}
+alt.Chart(movies).mark_point().encode(x=alt.X("runtime")).properties(
+    width=300, height=200
+)
+```
+
+```{python}
+alt.Chart(movies).mark_tick().encode(
+    x=alt.X("runtime")
+    ).properties(width=300, height=200)
+```
+```{python}
+alt.Chart(movies).mark_bar().encode(
+    x=alt.X("runtime", bin=alt.Bin(maxbins=30), title="Runtime"),
+    y=alt.Y("count()", title="Count"),
+).properties(width=300, height=200)
+```
+# Densidad
+```{python}
+alt.Chart(movies).transform_density(
+    "runtime",
+    as_=["runtime", "density"],
+).mark_area().encode(
+    x=alt.X("runtime:Q", title="Runtime"),
+    y=alt.Y("density:Q", title="Density"),
+).properties(
+    width=300, height=200
+)
+```
+
+# Densidad agrupado
+```{python}
+alt.Chart(movies).transform_density(
+    "runtime", groupby=["genre"], as_=["runtime", "density"]
+).mark_area(opacity=0.5).encode(
+    x=alt.X("runtime:Q", title="Runtime"),
+    y=alt.Y("density:Q", title="Density", stack=None),
+    color=alt.Color("genre:N", title="Genre"),
+).properties(
+    width=300, height=200
+)
+```
+```{python}
+density = alt.Chart(movies[:10]).transform_density(
+    "runtime",
+    as_=["runtime", "density"],
+).mark_area().encode(
+    x=alt.X("runtime:Q", title="Runtime"),
+    y=alt.Y("density:Q", title="Density"),
+).properties(
+    width=300, height=200
+)
+density
+```
+
+```{python}
+tick = (
+    alt.Chart(movies[:10])
+    .mark_tick(color="black", yOffset=80)
+    .encode(
+        x=alt.X("runtime:Q", title="Runtime"),
+    )
+)
+tick
+density + tick
+```

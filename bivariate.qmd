@@ -1,0 +1,119 @@
+---
+title: " Análisis Bivariado"
+
+---
+
+# Categórico vs Cuantitativo
+
+## Cargar dataset
+```{python}
+import altair as alt
+from vega_datasets import data
+import pandas as pd
+
+movies_extended = data.movies().dropna(subset = ['Major_Genre'])
+movies_extended.head()
+```
+# Comparando varias distribuciones
+## Histograma income vs categorías
+```{python}
+alt.Chart(movies_extended).mark_bar().encode(
+    x=alt.X("Worldwide_Gross", bin=alt.BinParams(maxbins=30)),
+    y=alt.Y("count()"),
+    color=alt.Color("Major_Genre"),
+)
+```
+# Density plot
+```{python}
+alt.Chart(movies_extended).transform_density(
+    density="Worldwide_Gross",
+    groupby=["Major_Genre"],
+    as_=["Worldwide_Gross", "density"],
+).mark_area(opacity=0.5).encode(
+    x=alt.X("Worldwide_Gross:Q", title="Worldwide Gross"),
+    y=alt.Y("density:Q", stack=None),
+    color=alt.Color("Major_Genre:N"),
+)
+```
+
+# Grafico de barras horizontales
+```{python}
+alt.Chart(movies_extended).mark_bar().encode(
+    x=alt.X("mean(Worldwide_Gross)", title="Average Worldwide Gross"),
+    y=alt.Y("Major_Genre"),
+    color=alt.Color("Major_Genre"),
+)
+```
+```{python}
+alt.Chart(movies_extended).mark_tick().encode(
+    x=alt.X("mean(Worldwide_Gross)", title="Average Worldwide Gross"),
+    y=alt.Y("Major_Genre"),
+    color=alt.Color("Major_Genre"),
+    tooltip=alt.Tooltip("Title:N"),
+).interactive()
+```
+## Heatmaps
+```{python}
+alt.Chart(movies_extended).mark_rect().encode(
+    x=alt.X("Worldwide_Gross", bin=alt.BinParams(maxbins=30)),
+    y=alt.Y("Major_Genre"),
+    color=alt.Color("count()")
+) 
+```
+## Boxplots
+```{python}
+alt.Chart(movies_extended).mark_boxplot().encode(
+    x=alt.X("Worldwide_Gross"),
+    y=alt.Y("Major_Genre")
+).properties(width=500, height=400) 
+```
+```{python}
+alt.Chart(movies_extended).mark_boxplot().encode(
+    x=alt.X("Worldwide_Gross"), y=alt.Y("Major_Genre"), size=alt.Size("count()")
+).properties(width=500, height=400)
+```
+
+# Cuantitativo vs Cuantitativo
+## Scatterplot
+```{python}
+alt.Chart(movies_extended).mark_point().encode(
+    y=alt.Y("Rotten_Tomatoes_Rating"),
+    x=alt.X("IMDB_Rating"),
+    color=alt.Color("Major_Genre"),
+    tooltip=alt.Tooltip("Title:N"),
+).interactive()
+```
+
+```{python}
+alt.Chart(movies_extended).mark_point().encode(
+    x=alt.X("Production_Budget"),
+    y=alt.Y("Worldwide_Gross"),
+)
+``` 
+
+## Heatmaps
+```{python}
+alt.Chart(movies_extended).mark_rect().encode(
+    x=alt.X("Production_Budget", bin=alt.BinParams(maxbins=100)),
+    y=alt.Y("Worldwide_Gross", bin=alt.BinParams(maxbins=100)),
+    color=alt.Color("count()")
+)
+``` 
+
+# Categórico vs Categórico 
+
+## Barcharts
+```{python}
+alt.Chart(movies_extended).mark_bar().encode(
+    y=alt.Y("Major_Genre", sort="-x"),
+    x=alt.X("count()"),
+    color=alt.Color("Major_Genre"),
+)
+```
+```{python}
+alt.Chart(movies_extended).mark_bar().encode(
+    y=alt.Y("Major_Genre", sort="-x"),
+    x=alt.X("count()", stack="normalize", title="Proporción de películas"),
+    color=alt.Color("MPAA_Rating:N"),
+)
+```

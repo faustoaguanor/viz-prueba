@@ -105,6 +105,27 @@
     "text": "Calculo del número de bins\nRegla de la raíz cuadrada\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna()\nn = len(datos)\nk_raiz = (math.sqrt(n)).__round__()\nmin_raiz = float(datos.min())\nmax_raiz = float(datos.max())\nstep_raiz = (max_raiz - min_raiz) / k_raiz\nprint(\"Bins:\", k_raiz, \"- Step:\", step_raiz)\n\nBins: 13 - Step: 2.5461538461538464\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\n        \"life_expectancy:Q\",\n        title=\"Expectativa de vida\",\n        bin=alt.BinParams(step=step_raiz, extent=[min_raiz, max_raiz]),\n    ),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\nRegla de Sturges\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna().to_list()\nn = len(datos)\nk_sturges = (1 + math.log2(n)).__round__()\nmin_sturges = min(datos)\nmax_sturges = max(datos)\nstep_sturges = (max_sturges - min_sturges) / k_sturges\nprint(\"Bins:\", k_sturges, \"- Step:\", step_sturges)\n\nBins: 8 - Step: 4.1375\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\",\n            bin=alt.BinParams(step=step_sturges, extent=[min_sturges, max_sturges])),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\nFreedman - Diaconis\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna()\nn = len(datos)\n\n# Cálculo del Rango Intercuartílico (IQR)\nq1 = datos.quantile(0.25)\nq3 = datos.quantile(0.75)\niqr = q3 - q1\n\n# Regla de Freedman-Diaconis para el ancho y número de bins\nmin_fd = float(datos.min())\nmax_fd = float(datos.max())\nbin_width = 2 * iqr / (n ** (1 / 3))\nrango = max_fd - min_fd\nk_fd = math.ceil(rango / bin_width)\nprint(\"Bins:\", k_fd, \"- Step:\", bin_width)\n\nBins: 9 - Step: 3.937619343136572\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\",\n            bin=alt.BinParams(step=bin_width, extent=[min_fd, max_fd])),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)"
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Bienvenido",
+    "section": "",
+    "text": "Este sitio fue construido con Quarto como parte de la Maestría en Ciencia de Datos. Aquí exploro datos reales usando Python y librerías de visualización como Altair, transformando números en historias visuales que facilitan la comprensión de patrones y tendencias.\n\n\n\nVisualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar\n\n\n\n\n\n\n\nSección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
+  },
+  {
+    "objectID": "index.html#qué-encontrarás-aquí",
+    "href": "index.html#qué-encontrarás-aquí",
+    "title": "Bienvenido",
+    "section": "",
+    "text": "Visualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar"
+  },
+  {
+    "objectID": "index.html#navegación",
+    "href": "index.html#navegación",
+    "title": "Bienvenido",
+    "section": "",
+    "text": "Sección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "Acerca del proyecto",
@@ -133,24 +154,66 @@
     "text": "Proyecto desarrollado por Alejandro como parte del programa de Maestría en Ciencia de Datos.\n\nEl código fuente está disponible en el repositorio del curso."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Bienvenido",
+    "objectID": "bivariate.html",
+    "href": "bivariate.html",
+    "title": "Análisis Bivariado",
     "section": "",
-    "text": "Este sitio fue construido con Quarto como parte de la Maestría en Ciencia de Datos. Aquí exploro datos reales usando Python y librerías de visualización como Altair, transformando números en historias visuales que facilitan la comprensión de patrones y tendencias.\n\n\n\nVisualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar\n\n\n\n\n\n\n\nSección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
+    "text": "import altair as alt\nfrom vega_datasets import data\nimport pandas as pd\n\nmovies_extended = data.movies().dropna(subset = ['Major_Genre'])\nmovies_extended.head()\n\n\n\n\n\n\n\n\nTitle\nUS_Gross\nWorldwide_Gross\nUS_DVD_Sales\nProduction_Budget\nRelease_Date\nMPAA_Rating\nRunning_Time_min\nDistributor\nSource\nMajor_Genre\nCreative_Type\nDirector\nRotten_Tomatoes_Rating\nIMDB_Rating\nIMDB_Votes\n\n\n\n\n1\nFirst Love, Last Rites\n10876.0\n10876.0\nNaN\n300000.0\nAug 07 1998\nR\nNaN\nStrand\nNaN\nDrama\nNaN\nNaN\nNaN\n6.9\n207.0\n\n\n2\nI Married a Strange Person\n203134.0\n203134.0\nNaN\n250000.0\nAug 28 1998\nNaN\nNaN\nLionsgate\nNaN\nComedy\nNaN\nNaN\nNaN\n6.8\n865.0\n\n\n3\nLet's Talk About Sex\n373615.0\n373615.0\nNaN\n300000.0\nSep 11 1998\nNaN\nNaN\nFine Line\nNaN\nComedy\nNaN\nNaN\n13.0\nNaN\nNaN\n\n\n4\nSlam\n1009819.0\n1087521.0\nNaN\n1000000.0\nOct 09 1998\nR\nNaN\nTrimark\nOriginal Screenplay\nDrama\nContemporary Fiction\nNaN\n62.0\n3.4\n165.0\n\n\n7\nFoolish\n6026908.0\n6026908.0\nNaN\n1600000.0\nApr 09 1999\nR\nNaN\nArtisan\nOriginal Screenplay\nComedy\nContemporary Fiction\nNaN\nNaN\n3.8\n353.0"
   },
   {
-    "objectID": "index.html#qué-encontrarás-aquí",
-    "href": "index.html#qué-encontrarás-aquí",
-    "title": "Bienvenido",
+    "objectID": "bivariate.html#cargar-dataset",
+    "href": "bivariate.html#cargar-dataset",
+    "title": "Análisis Bivariado",
     "section": "",
-    "text": "Visualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar"
+    "text": "import altair as alt\nfrom vega_datasets import data\nimport pandas as pd\n\nmovies_extended = data.movies().dropna(subset = ['Major_Genre'])\nmovies_extended.head()\n\n\n\n\n\n\n\n\nTitle\nUS_Gross\nWorldwide_Gross\nUS_DVD_Sales\nProduction_Budget\nRelease_Date\nMPAA_Rating\nRunning_Time_min\nDistributor\nSource\nMajor_Genre\nCreative_Type\nDirector\nRotten_Tomatoes_Rating\nIMDB_Rating\nIMDB_Votes\n\n\n\n\n1\nFirst Love, Last Rites\n10876.0\n10876.0\nNaN\n300000.0\nAug 07 1998\nR\nNaN\nStrand\nNaN\nDrama\nNaN\nNaN\nNaN\n6.9\n207.0\n\n\n2\nI Married a Strange Person\n203134.0\n203134.0\nNaN\n250000.0\nAug 28 1998\nNaN\nNaN\nLionsgate\nNaN\nComedy\nNaN\nNaN\nNaN\n6.8\n865.0\n\n\n3\nLet's Talk About Sex\n373615.0\n373615.0\nNaN\n300000.0\nSep 11 1998\nNaN\nNaN\nFine Line\nNaN\nComedy\nNaN\nNaN\n13.0\nNaN\nNaN\n\n\n4\nSlam\n1009819.0\n1087521.0\nNaN\n1000000.0\nOct 09 1998\nR\nNaN\nTrimark\nOriginal Screenplay\nDrama\nContemporary Fiction\nNaN\n62.0\n3.4\n165.0\n\n\n7\nFoolish\n6026908.0\n6026908.0\nNaN\n1600000.0\nApr 09 1999\nR\nNaN\nArtisan\nOriginal Screenplay\nComedy\nContemporary Fiction\nNaN\nNaN\n3.8\n353.0"
   },
   {
-    "objectID": "index.html#navegación",
-    "href": "index.html#navegación",
-    "title": "Bienvenido",
+    "objectID": "bivariate.html#histograma-income-vs-categorías",
+    "href": "bivariate.html#histograma-income-vs-categorías",
+    "title": "Análisis Bivariado",
+    "section": "Histograma income vs categorías",
+    "text": "Histograma income vs categorías\n\nalt.Chart(movies_extended).mark_bar().encode(\n    x=alt.X(\"Worldwide_Gross\", bin=alt.BinParams(maxbins=30)),\n    y=alt.Y(\"count()\"),\n    color=alt.Color(\"Major_Genre\"),\n)"
+  },
+  {
+    "objectID": "bivariate.html#heatmaps",
+    "href": "bivariate.html#heatmaps",
+    "title": "Análisis Bivariado",
+    "section": "Heatmaps",
+    "text": "Heatmaps\n\nalt.Chart(movies_extended).mark_rect().encode(\n    x=alt.X(\"Worldwide_Gross\", bin=alt.BinParams(maxbins=30)),\n    y=alt.Y(\"Major_Genre\"),\n    color=alt.Color(\"count()\")\n)"
+  },
+  {
+    "objectID": "bivariate.html#boxplots",
+    "href": "bivariate.html#boxplots",
+    "title": "Análisis Bivariado",
+    "section": "Boxplots",
+    "text": "Boxplots\n\nalt.Chart(movies_extended).mark_boxplot().encode(\n    x=alt.X(\"Worldwide_Gross\"),\n    y=alt.Y(\"Major_Genre\")\n).properties(width=500, height=400) \n\n\n\n\n\n\n\n\nalt.Chart(movies_extended).mark_boxplot().encode(\n    x=alt.X(\"Worldwide_Gross\"), y=alt.Y(\"Major_Genre\"), size=alt.Size(\"count()\")\n).properties(width=500, height=400)"
+  },
+  {
+    "objectID": "bivariate.html#scatterplot",
+    "href": "bivariate.html#scatterplot",
+    "title": "Análisis Bivariado",
+    "section": "Scatterplot",
+    "text": "Scatterplot\n\nalt.Chart(movies_extended).mark_point().encode(\n    y=alt.Y(\"Rotten_Tomatoes_Rating\"),\n    x=alt.X(\"IMDB_Rating\"),\n    color=alt.Color(\"Major_Genre\"),\n    tooltip=alt.Tooltip(\"Title:N\"),\n).interactive()\n\n\n\n\n\n\n\n\nalt.Chart(movies_extended).mark_point().encode(\n    x=alt.X(\"Production_Budget\"),\n    y=alt.Y(\"Worldwide_Gross\"),\n)"
+  },
+  {
+    "objectID": "bivariate.html#heatmaps-1",
+    "href": "bivariate.html#heatmaps-1",
+    "title": "Análisis Bivariado",
+    "section": "Heatmaps",
+    "text": "Heatmaps\n\nalt.Chart(movies_extended).mark_rect().encode(\n    x=alt.X(\"Production_Budget\", bin=alt.BinParams(maxbins=100)),\n    y=alt.Y(\"Worldwide_Gross\", bin=alt.BinParams(maxbins=100)),\n    color=alt.Color(\"count()\")\n)"
+  },
+  {
+    "objectID": "bivariate.html#barcharts",
+    "href": "bivariate.html#barcharts",
+    "title": "Análisis Bivariado",
+    "section": "Barcharts",
+    "text": "Barcharts\n\nalt.Chart(movies_extended).mark_bar().encode(\n    y=alt.Y(\"Major_Genre\", sort=\"-x\"),\n    x=alt.X(\"count()\"),\n    color=alt.Color(\"Major_Genre\"),\n)\n\n\n\n\n\n\n\n\nalt.Chart(movies_extended).mark_bar().encode(\n    y=alt.Y(\"Major_Genre\", sort=\"-x\"),\n    x=alt.X(\"count()\", stack=\"normalize\", title=\"Proporción de películas\"),\n    color=alt.Color(\"MPAA_Rating:N\"),\n)"
+  },
+  {
+    "objectID": "univariate.html",
+    "href": "univariate.html",
+    "title": "Análisis Univariado",
     "section": "",
-    "text": "Sección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
+    "text": "Cargar Librerías\n\nfrom vega_datasets import data\nimport pandas as pd\nimport altair as alt\n\n# ELiminar limitante de registros de altair\nalt.data_transformers.disable_max_rows()\n\nDataTransformerRegistry.enable('default')\n\n\n\n\nCargar dataset de movies\n\nmovies = pd.read_csv(\n    \"https://raw.githubusercontent.com/erickedu85/dataset/master/movies.csv\"\n)\n\nmovies.head()\n\n\n\n\n\n\n\n\ntitle\nruntime\nbudget\nrevenue\ngenre\ncountry\nvote_average\n\n\n\n\n0\nFinding Nemo\n100\n94000000\n940335536\nAnimation\nUnited States of America\n3.86\n\n\n1\nPirates of the Caribbean: The Curse of the Bla...\n143\n140000000\n655011224\nFantasy\nUnited States of America\n3.81\n\n\n2\nThe Simpsons Movie\n87\n75000000\n527068851\nAnimation\nUnited States of America\n3.44\n\n\n3\nPirates of the Caribbean: Dead Man's Chest\n151\n200000000\n1065659812\nFantasy\nUnited States of America\n3.47\n\n\n4\nMars Attacks!\n106\n70000000\n101371017\nFantasy\nUnited States of America\n2.96\n\n\n\n\n\n\n\n\n\nSingle-Axis plot\n\nalt.Chart(movies).mark_point().encode(x=alt.X(\"runtime\")).properties(\n    width=300, height=200\n)\n\n\n\n\n\n\n\n\nalt.Chart(movies).mark_tick().encode(\n    x=alt.X(\"runtime\")\n    ).properties(width=300, height=200)\n\n\n\n\n\n\n\n\nalt.Chart(movies).mark_bar().encode(\n    x=alt.X(\"runtime\", bin=alt.Bin(maxbins=30), title=\"Runtime\"),\n    y=alt.Y(\"count()\", title=\"Count\"),\n).properties(width=300, height=200)\n\n\n\n\n\n\n\n\n\nDensidad\n\nalt.Chart(movies).transform_density(\n    \"runtime\",\n    as_=[\"runtime\", \"density\"],\n).mark_area().encode(\n    x=alt.X(\"runtime:Q\", title=\"Runtime\"),\n    y=alt.Y(\"density:Q\", title=\"Density\"),\n).properties(\n    width=300, height=200\n)\n\n\n\n\n\n\n\n\n\nDensidad agrupado\n\nalt.Chart(movies).transform_density(\n    \"runtime\", groupby=[\"genre\"], as_=[\"runtime\", \"density\"]\n).mark_area(opacity=0.5).encode(\n    x=alt.X(\"runtime:Q\", title=\"Runtime\"),\n    y=alt.Y(\"density:Q\", title=\"Density\", stack=None),\n    color=alt.Color(\"genre:N\", title=\"Genre\"),\n).properties(\n    width=300, height=200\n)\n\n\n\n\n\n\n\n\ndensity = alt.Chart(movies[:10]).transform_density(\n    \"runtime\",\n    as_=[\"runtime\", \"density\"],\n).mark_area().encode(\n    x=alt.X(\"runtime:Q\", title=\"Runtime\"),\n    y=alt.Y(\"density:Q\", title=\"Density\"),\n).properties(\n    width=300, height=200\n)\ndensity\n\n\n\n\n\n\n\n\ntick = (\n    alt.Chart(movies[:10])\n    .mark_tick(color=\"black\", yOffset=80)\n    .encode(\n        x=alt.X(\"runtime:Q\", title=\"Runtime\"),\n    )\n)\ntick\ndensity + tick"
   }
 ]
