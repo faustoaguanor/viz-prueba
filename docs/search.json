@@ -105,53 +105,39 @@
     "text": "Calculo del número de bins\nRegla de la raíz cuadrada\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna()\nn = len(datos)\nk_raiz = (math.sqrt(n)).__round__()\nmin_raiz = float(datos.min())\nmax_raiz = float(datos.max())\nstep_raiz = (max_raiz - min_raiz) / k_raiz\nprint(\"Bins:\", k_raiz, \"- Step:\", step_raiz)\n\nBins: 13 - Step: 2.5461538461538464\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\n        \"life_expectancy:Q\",\n        title=\"Expectativa de vida\",\n        bin=alt.BinParams(step=step_raiz, extent=[min_raiz, max_raiz]),\n    ),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\nRegla de Sturges\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna().to_list()\nn = len(datos)\nk_sturges = (1 + math.log2(n)).__round__()\nmin_sturges = min(datos)\nmax_sturges = max(datos)\nstep_sturges = (max_sturges - min_sturges) / k_sturges\nprint(\"Bins:\", k_sturges, \"- Step:\", step_sturges)\n\nBins: 8 - Step: 4.1375\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\",\n            bin=alt.BinParams(step=step_sturges, extent=[min_sturges, max_sturges])),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)\n\n\n\n\n\n\n\nFreedman - Diaconis\n\nimport math\n\ndatos = gm_url_2018[\"life_expectancy\"].dropna()\nn = len(datos)\n\n# Cálculo del Rango Intercuartílico (IQR)\nq1 = datos.quantile(0.25)\nq3 = datos.quantile(0.75)\niqr = q3 - q1\n\n# Regla de Freedman-Diaconis para el ancho y número de bins\nmin_fd = float(datos.min())\nmax_fd = float(datos.max())\nbin_width = 2 * iqr / (n ** (1 / 3))\nrango = max_fd - min_fd\nk_fd = math.ceil(rango / bin_width)\nprint(\"Bins:\", k_fd, \"- Step:\", bin_width)\n\nBins: 9 - Step: 3.937619343136572\n\n\n\nalt.Chart(gm_url_2018).mark_bar().encode(\n    x=alt.X(\"life_expectancy:Q\", title=\"Expectativa de vida\",\n            bin=alt.BinParams(step=bin_width, extent=[min_fd, max_fd])),\n    y=alt.Y(\"count():Q\", title=\"Número de países\"),\n    color=alt.Color(\"region:N\", title=\"Región\"),\n    tooltip=[\n        alt.Tooltip(\"life_expectancy:Q\", title=\"Expectativa de vida\"),\n        alt.Tooltip(\"count():Q\", title=\"Número de países\"),\n    ],\n).properties(width=500, height=300)"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Bienvenido",
+    "objectID": "series.html",
+    "href": "series.html",
+    "title": "Series de tiempo",
     "section": "",
-    "text": "Este sitio fue construido con Quarto como parte de la Maestría en Ciencia de Datos. Aquí exploro datos reales usando Python y librerías de visualización como Altair, transformando números en historias visuales que facilitan la comprensión de patrones y tendencias.\n\n\n\nVisualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar\n\n\n\n\n\n\n\nSección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
+    "text": "import pandas as pd\nimport altair as alt\nfrom vega_datasets import data"
   },
   {
-    "objectID": "index.html#qué-encontrarás-aquí",
-    "href": "index.html#qué-encontrarás-aquí",
-    "title": "Bienvenido",
-    "section": "",
-    "text": "Visualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar"
+    "objectID": "series.html#multiples-series",
+    "href": "series.html#multiples-series",
+    "title": "Series de tiempo",
+    "section": "Multiples series",
+    "text": "Multiples series\n\nhighlight = alt.selection_point(\n    on=\"pointerover\", fields=[\"Major_Genre\"], clear=\"pointerout\"\n)\n\nalt.Chart(movies_cleaned).mark_line(point=True).encode(\n    x=alt.X(\"year(Release_Date)\"),\n    y=alt.Y(\"sum(US_Gross)\"),\n    color=alt.Color(\"Major_Genre\"),\n    opacity=alt.condition(highlight, alt.value(1), alt.value(0.3)),\n    tooltip=[\"year(Release_Date)\", \"sum(US_Gross)\"],\n).add_params(highlight).interactive()"
   },
   {
-    "objectID": "index.html#navegación",
-    "href": "index.html#navegación",
-    "title": "Bienvenido",
-    "section": "",
-    "text": "Sección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
+    "objectID": "series.html#multiples-series-con-áreas",
+    "href": "series.html#multiples-series-con-áreas",
+    "title": "Series de tiempo",
+    "section": "Multiples series con áreas",
+    "text": "Multiples series con áreas\n\nhighlight = alt.selection_point(\n    on=\"pointerover\", fields=[\"Major_Genre\"], clear=\"pointerout\"\n)\n\nalt.Chart(movies_cleaned).mark_area(line=True, interpolate=\"cardinal\").encode(\n    x=alt.X(\"year(Release_Date)\"),\n    y=alt.Y(\"sum(US_Gross)\"),\n    color=alt.Color(\"Major_Genre\"),\n    opacity=alt.condition(highlight, alt.value(1), alt.value(0.3)),\n    tooltip=[\"year(Release_Date)\", \"sum(US_Gross)\"],\n).add_params(highlight).interactive()"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Acerca del proyecto",
-    "section": "",
-    "text": "Este sitio es el resultado de la Clase 3 del curso de Visualización Analítica, parte de la Maestría en Ciencia de Datos.\n\n\nExplorar herramientas modernas de visualización de datos en Python, con énfasis en gráficos interactivos que permiten comunicar hallazgos de forma clara y efectiva.\n\n\n\n\nQuarto — generación del sitio web estático\nPython — lenguaje principal de análisis\nAltair — visualizaciones declarativas basadas en Vega-Lite\nVega Datasets — conjuntos de datos listos para explorar\nPandas — manipulación y análisis de datos\n\n\n\n\nProyecto desarrollado por Alejandro como parte del programa de Maestría en Ciencia de Datos.\n\nEl código fuente está disponible en el repositorio del curso."
+    "objectID": "series.html#multiples-series-con-streamgraphs",
+    "href": "series.html#multiples-series-con-streamgraphs",
+    "title": "Series de tiempo",
+    "section": "Multiples series con streamgraphs",
+    "text": "Multiples series con streamgraphs\n\nhighlight = alt.selection_point(\n    on=\"pointerover\", fields=[\"Major_Genre\"], clear=\"pointerout\"\n)\n\nalt.Chart(movies_cleaned).mark_area(line=True, interpolate=\"cardinal\").encode(\n    x=alt.X(\"year(Release_Date)\"),\n    y=alt.Y(\"sum(US_Gross)\", stack=\"center\", axis=None),\n    color=alt.Color(\"Major_Genre\"),\n    opacity=alt.condition(highlight, alt.value(1), alt.value(0.3)),\n    tooltip=[\"year(Release_Date)\", \"sum(US_Gross)\"],\n).add_params(highlight).interactive()"
   },
   {
-    "objectID": "about.html#objetivo",
-    "href": "about.html#objetivo",
-    "title": "Acerca del proyecto",
-    "section": "",
-    "text": "Explorar herramientas modernas de visualización de datos en Python, con énfasis en gráficos interactivos que permiten comunicar hallazgos de forma clara y efectiva."
-  },
-  {
-    "objectID": "about.html#tecnologías-utilizadas",
-    "href": "about.html#tecnologías-utilizadas",
-    "title": "Acerca del proyecto",
-    "section": "",
-    "text": "Quarto — generación del sitio web estático\nPython — lenguaje principal de análisis\nAltair — visualizaciones declarativas basadas en Vega-Lite\nVega Datasets — conjuntos de datos listos para explorar\nPandas — manipulación y análisis de datos"
-  },
-  {
-    "objectID": "about.html#autor",
-    "href": "about.html#autor",
-    "title": "Acerca del proyecto",
-    "section": "",
-    "text": "Proyecto desarrollado por Alejandro como parte del programa de Maestría en Ciencia de Datos.\n\nEl código fuente está disponible en el repositorio del curso."
+    "objectID": "series.html#small-graphs",
+    "href": "series.html#small-graphs",
+    "title": "Series de tiempo",
+    "section": "Small Graphs",
+    "text": "Small Graphs\n\nformat_gross = '$.3s'\n\nhighlight = alt.selection_point(\n    on=\"pointerover\",\n    fields=[\"Major_Genre\"],\n    clear=\"pointerout\"\n)\n\nalt.Chart(movies_cleaned).mark_area(\n    interpolate='basis',\n    line=True\n).encode(\n    x=alt.X('year(Release_Date)'),\n    y=alt.Y(\n        'sum(US_Gross)',\n        title='Sum US Gross',\n        axis=alt.Axis(format=format_gross)\n    ),\n    row=alt.Row(\"Major_Genre:N\"),\n    color=\"Major_Genre:N\",\n    opacity=alt.condition(\n        highlight,\n        alt.value(1),\n        alt.value(0.3)\n    ),\n    tooltip=[\n        alt.Tooltip('year(Release_Date)'),\n        alt.Tooltip('Major_Genre'),\n        alt.Tooltip('sum(US_Gross)', format=format_gross)\n    ]\n).add_params(\n    highlight\n).properties(\n    width=600,\n    height=70\n).interactive()"
   },
   {
     "objectID": "bivariate.html",
@@ -208,6 +194,55 @@
     "title": "Análisis Bivariado",
     "section": "Barcharts",
     "text": "Barcharts\n\nalt.Chart(movies_extended).mark_bar().encode(\n    y=alt.Y(\"Major_Genre\", sort=\"-x\"),\n    x=alt.X(\"count()\"),\n    color=alt.Color(\"Major_Genre\"),\n)\n\n\n\n\n\n\n\n\nalt.Chart(movies_extended).mark_bar().encode(\n    y=alt.Y(\"Major_Genre\", sort=\"-x\"),\n    x=alt.X(\"count()\", stack=\"normalize\", title=\"Proporción de películas\"),\n    color=alt.Color(\"MPAA_Rating:N\"),\n)"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Acerca del proyecto",
+    "section": "",
+    "text": "Este sitio es el resultado de la Clase 3 del curso de Visualización Analítica, parte de la Maestría en Ciencia de Datos.\n\n\nExplorar herramientas modernas de visualización de datos en Python, con énfasis en gráficos interactivos que permiten comunicar hallazgos de forma clara y efectiva.\n\n\n\n\nQuarto — generación del sitio web estático\nPython — lenguaje principal de análisis\nAltair — visualizaciones declarativas basadas en Vega-Lite\nVega Datasets — conjuntos de datos listos para explorar\nPandas — manipulación y análisis de datos\n\n\n\n\nProyecto desarrollado por Alejandro como parte del programa de Maestría en Ciencia de Datos.\n\nEl código fuente está disponible en el repositorio del curso."
+  },
+  {
+    "objectID": "about.html#objetivo",
+    "href": "about.html#objetivo",
+    "title": "Acerca del proyecto",
+    "section": "",
+    "text": "Explorar herramientas modernas de visualización de datos en Python, con énfasis en gráficos interactivos que permiten comunicar hallazgos de forma clara y efectiva."
+  },
+  {
+    "objectID": "about.html#tecnologías-utilizadas",
+    "href": "about.html#tecnologías-utilizadas",
+    "title": "Acerca del proyecto",
+    "section": "",
+    "text": "Quarto — generación del sitio web estático\nPython — lenguaje principal de análisis\nAltair — visualizaciones declarativas basadas en Vega-Lite\nVega Datasets — conjuntos de datos listos para explorar\nPandas — manipulación y análisis de datos"
+  },
+  {
+    "objectID": "about.html#autor",
+    "href": "about.html#autor",
+    "title": "Acerca del proyecto",
+    "section": "",
+    "text": "Proyecto desarrollado por Alejandro como parte del programa de Maestría en Ciencia de Datos.\n\nEl código fuente está disponible en el repositorio del curso."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Bienvenido",
+    "section": "",
+    "text": "Este sitio fue construido con Quarto como parte de la Maestría en Ciencia de Datos. Aquí exploro datos reales usando Python y librerías de visualización como Altair, transformando números en historias visuales que facilitan la comprensión de patrones y tendencias.\n\n\n\nVisualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar\n\n\n\n\n\n\n\nSección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
+  },
+  {
+    "objectID": "index.html#qué-encontrarás-aquí",
+    "href": "index.html#qué-encontrarás-aquí",
+    "title": "Bienvenido",
+    "section": "",
+    "text": "Visualizaciones interactivas construidas con Altair y Vega\nAnálisis exploratorio de datasets clásicos de ciencia de datos\nCódigo reproducible en Python, listo para inspeccionar y adaptar"
+  },
+  {
+    "objectID": "index.html#navegación",
+    "href": "index.html#navegación",
+    "title": "Bienvenido",
+    "section": "",
+    "text": "Sección\nDescripción\n\n\n\n\nVisualización\nGráficos interactivos del dataset Cars\n\n\nAcerca de\nContexto del proyecto y del autor\n\n\n\n\n\n“Un buen gráfico vale más que mil filas de datos.”"
   },
   {
     "objectID": "univariate.html",

@@ -16,6 +16,8 @@ website:
         text: Analisis Univariado
       - href: bivariate.qmd
         text: Analisis Bivariado
+      - href: series.qmd
+        text: Series de Tiempo
 
 format:
   html:
