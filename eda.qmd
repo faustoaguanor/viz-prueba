@@ -1,0 +1,298 @@
+---
+title: "Análisis Exploratorio de Datos - EDA"
+
+---
+
+# Importar librerías
+```{python}
+import pandas as pd
+import altair as alt
+from vega_datasets import data
+```
+
+# Cargar dataset movies
+```{python}
+movies_extended = data.movies()
+movies_extended.head()
+```
+
+# Tipo de datos del dataset
+```{python}
+movies_extended.info()
+```
+# Porcentaje de valores nulos en el dataframe
+```{python}
+nan_percent = movies_extended.isna().mean() * 100
+nan_percent_sorted = nan_percent.sort_values(ascending=False).round(2)
+print(nan_percent_sorted)
+nan_percent_sorted
+```
+
+# Visualización de los valores nulos 
+```{python}
+movies_nans = movies_extended.isna().reset_index().melt(id_vars='index', var_name='column', value_name='NaN')
+movies_nans
+```
+
+# Eliminar restricción de altair para mostrar más de 5000 filas
+```{python}
+alt.data_transformers.disable_max_rows()
+```
+# Visualización de los valores nulos con Altair
+```{python}
+alt.Chart(movies_nans).mark_rect().encode(
+    x=alt.X("index:O"),
+    y=alt.Y("column"),
+    color=alt.Color("NaN"),
+    stroke=alt.Stroke("NaN"),
+).properties(title="Cantidad de valores nulos por columna", width=500, height=400)
+```
+
+# Treshold para eliminar columnas con más del 70% de valores nulos
+```{python}
+threshold = 70
+columns_to_drop = nan_percent_sorted[nan_percent_sorted > threshold].index  
+print(f"Columnas a eliminar por tener más del {threshold}% de valores nulos: {list(columns_to_drop)}")
+movies_cleaned = movies_extended.drop(columns=columns_to_drop)
+```
+
+# Estadísticos descriptivos de las columnas numéricas
+```{python}
+movies_cleaned.describe()
+```
+# Visualización de la distribución de las variables numericas usando repeat
+```{python}
+numeric_columns = movies_cleaned.select_dtypes("number").columns.tolist()
+chart = (
+    alt.Chart(movies_cleaned)
+    .mark_bar()
+    .encode(
+        x=alt.X(alt.repeat(), type="quantitative", bin=alt.Bin(maxbins=30)),
+        y=alt.Y("count()", title="Count"),
+    )
+    .properties(width=150, height=150)
+    .repeat(numeric_columns, columns=3)
+)
+chart
+```
+# Visualización de gráfico de dispersión por todas las combinaciones de variables numéricas usando repeat
+```{python} 
+chart_scatter = (
+    alt.Chart(movies_cleaned)
+    .mark_point()
+    .encode(
+        x=alt.X(alt.repeat("column"), type="quantitative"),
+        y=alt.Y(alt.repeat("row"), type="quantitative"),
+        tooltip=["Title:N"],
+        color=alt.value("steelblue"),
+    )
+    .properties(width=150, height=150)
+    .repeat(
+        row=numeric_columns,
+        column=numeric_columns,
+    )
+)
+chart_scatter
+```
+# Visualización de gráfico de dispersión con numerical filter (lista) usando repeat
+```{python}
+numerical_filter = ["IMDB_Rating", "Rotten_Tomatoes_Rating", "US_Gross", "Production_Budget"]
+chart_scatter_filtered = (
+    alt.Chart(movies_cleaned)
+    .mark_point()
+    .encode(
+        x=alt.X(alt.repeat("column"), type="quantitative"),
+        y=alt.Y(alt.repeat("row"), type="quantitative"),
+        tooltip=["Title:N"],
+        color=alt.value("steelblue"),
+    )
+    .properties(width=150, height=150)
+    .repeat(
+        row=numerical_filter,
+        column=numerical_filter,
+    )
+)
+chart_scatter_filtered
+```
+# Heatmap de todas las combinaciones de variables numéricas usando repeat
+```{python}
+chart_heatmap = (
+    alt.Chart(movies_cleaned)
+    .mark_rect()
+    .encode(
+        x=alt.X(alt.repeat("column"), type="quantitative", bin=alt.Bin(maxbins=30)),
+        y=alt.Y(alt.repeat("row"), type="quantitative", bin=alt.Bin(maxbins=30)),
+        color=alt.Color("count()", scale=alt.Scale(scheme="blues")),
+    )
+    .properties(width=150, height=150)
+    .repeat(row=numerical_filter, column=numerical_filter)
+    .resolve_scale(color="independent")
+)
+
+chart_heatmap
+```
+# Correlación de Pearson entre las variables numéricas
+```{python}
+correlation_matrix = movies_cleaned[numeric_columns].corr(method="pearson")
+correlation_matrix
+```
+# Tabla con melt para mostrar la correlación entre las variables numéricas
+```{python}
+correlation_melted = correlation_matrix.reset_index().melt(id_vars="index", var_name="variable", value_name="correlation")
+correlation_melted
+```
+# Visualización de la correlación entre las variables numéricas usando Altair la correlacion como etiqueta en cada cuadro del heatmap
+```{python}
+heatmap_corr = (
+    alt.Chart(correlation_melted)
+    .mark_rect()
+    .encode(
+        x=alt.X("index:O", title="Variable 1"),
+        y=alt.Y("variable:O", title="Variable 2"),
+        color=alt.Color(
+            "correlation:Q", scale=alt.Scale(scheme="blues", domain=[-1, 1])
+        ),
+        tooltip=["correlation:Q"],
+    )
+    .properties(
+        title="Matriz de Correlación entre Variables Numéricas", width=500, height=400
+    )
+)
+text_corr = heatmap_corr.mark_text(baseline="middle").encode(
+    text=alt.Text("correlation:Q", format=".2f"),
+    color=alt.condition(
+        alt.datum.correlation
+        > 0.5,  # Cambia el color del texto si la correlación es alta
+        alt.value("white"),
+        alt.value("black"),
+    ),
+)
+heatmap_corr + text_corr
+```
+# Visualización de la correlación entre las variables numéricas usando Altair la correlacion como etiqueta de texto y solo la mitad inferior del heatmap
+```{python}
+# mantener solo la mitad inferior de la matriz de correlación usando variable1 <= variable2
+correlation_melted_half = correlation_melted[
+    correlation_melted["index"] <= correlation_melted["variable"]
+]
+heatmap_corr_half = (
+    alt.Chart(correlation_melted_half)
+    .mark_rect()
+    .encode(
+        x=alt.X("index:O", title="Variable 1"),
+        y=alt.Y("variable:O", title="Variable 2"),
+        color=alt.Color("correlation:Q", scale=alt.Scale(scheme="redblue", domain=[-1, 1])),
+        tooltip=["correlation:Q"],
+    )
+    .properties(
+        title="Matriz de Correlación entre Variables Numéricas (Mitad Inferior)",
+        width=500,
+        height=400,
+    )
+)
+text_corr_half = heatmap_corr_half.mark_text(baseline="middle").encode(
+    text=alt.Text("correlation:Q", format=".2f"),
+    color=alt.condition(
+        alt.datum.correlation
+        > 0.5,  # Cambia el color del texto si la correlación es alta
+        alt.value("white"),
+        alt.value("black"),
+    ),
+)
+heatmap_corr_half + text_corr_half
+```
+
+# Cruce entre variables numéricas y categóricas usando Altair y repeat
+```{python}
+categorical_columns = movies_cleaned.select_dtypes("object").columns.tolist()
+categorical_to_remove = [
+    "Title",
+    "Release_Date",
+    "Distributor",
+    "Director",
+    "Source",
+    "Actor_1",
+    "Actor_2",
+    "Actor_3",
+]
+categorical_columns = [
+    col for col in categorical_columns if col not in categorical_to_remove
+]
+chart_categorical_numeric = (
+    alt.Chart(movies_cleaned)
+    .mark_boxplot()
+    .encode(
+        x=alt.X(alt.repeat("column"), type="nominal"),
+        y=alt.Y(alt.repeat("row"), type="quantitative"),
+        color=alt.value("steelblue"),
+    )
+    .properties(width=150, height=150)
+    .repeat(
+        row=numeric_columns,
+        column=categorical_columns,
+    )
+)
+chart_categorical_numeric
+```
+# Describir variables categóricas excluyendo las columnas de tipo number 
+```{python}
+movies_cleaned[categorical_columns].describe()
+```
+
+# Visualización de la distribución de las variables categóricas usando repeat
+```{python}
+chart_categorical = (
+    alt.Chart(movies_cleaned)
+    .mark_bar()
+    .encode(
+        x=alt.X(alt.repeat(), type="nominal"),
+        y=alt.Y("count()", title="Count"),
+    )
+    .properties(width=150, height=150)
+    .repeat(categorical_columns, columns=3)
+)   
+chart_categorical
+```
+
+# Exploración de conteos de combinación de las columnas categóricas usando Altair y repeat
+```{python}
+# usar mark_circle para mostrar la cantidad de combinaciones de las columnas categóricas
+chart_categorical_combinations = (
+    alt.Chart(movies_cleaned)
+    .mark_circle()
+    .encode(
+        x=alt.X(alt.repeat("column"), type="nominal"),
+        y=alt.Y(alt.repeat("row"), type="nominal"),
+        size=alt.Size("count()", title="Count"),
+        color=alt.value("steelblue"),
+        tooltip=["count()"],
+    )
+    .properties(width=150, height=150)
+    .repeat(
+        row=categorical_columns,
+        column=categorical_columns,
+    )
+)
+chart_categorical_combinations
+```
+
+# Facetado de gráficos de dispersión entre variables numéricas y categóricas usando Altair y repeat
+```{python}
+# Usar boxplot para comparar los conteos de Major Genres y Create types con cada MPAA_Rating
+
+facet_scatter = (
+    alt.Chart(movies_cleaned)
+    .mark_boxplot()
+    .encode(
+        x=alt.X(alt.repeat("column"), type="nominal"),
+        y=alt.Y(alt.repeat("row"), type="quantitative"),
+        color=alt.value("steelblue"),
+    )
+    .properties(width=150, height=150)
+    .repeat(
+        row=numeric_columns,
+        column=categorical_columns,
+    )
+)
+facet_scatter
+```

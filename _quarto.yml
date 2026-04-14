@@ -18,6 +18,8 @@ website:
         text: Analisis Bivariado
       - href: series.qmd
         text: Series de Tiempo
+      - href: eda.qmd
+        text: EDA
 
 format:
   html:
