@@ -20,6 +20,10 @@ website:
         text: Series de Tiempo
       - href: eda.qmd
         text: EDA
+      - href: text.qmd
+        text: Vizualización de texto
+      - href: geo.qmd
+        text: Vizualización geográfica
 
 format:
   html:

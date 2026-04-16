@@ -1,0 +1,162 @@
+--- 
+title: Visualización de Texto
+---
+
+# Cargar Librerías python
+```{python}
+import altair as alt
+import pandas as pd
+import requests
+ 
+# Natural Language Toolkit
+import nltk
+# downloading some additional packages and corpora
+nltk.download('punkt_tab') # necessary for tokenization
+nltk.download('wordnet') # necessary for lemmatization
+nltk.download('stopwords') # necessary for removal of stop words
+nltk.download('averaged_perceptron_tagger_eng') # necessary for POS tagging
+nltk.download('maxent_ne_chunker' ) # necessary for entity extraction
+nltk.download('omw-1.4') # necessary for lemmatization
+nltk.download('words')
+```
+# Cargar datos de texto desde una url  con request
+```{python}
+url = "https://raw.githubusercontent.com/erickedu85/dataset/master/story.txt"
+response = requests.get(url)
+text_data = response.text
+print(text_data[:500]) # Imprime los primeros 500 caracteres del texto
+``` 
+# Tokenización
+```{python}
+from nltk.tokenize import word_tokenize
+tokens = word_tokenize(text_data)
+print(tokens[:20]) # Imprime los primeros 20 tokens
+``` 
+# lematización  y steamming
+```{python}
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer
+from nltk.corpus import wordnet
+
+lemmatizer = WordNetLemmatizer()
+stemmer = PorterStemmer()
+
+word = "change"
+print("Lematización:", lemmatizer.lemmatize(
+    word, pos=wordnet.VERB))  # Lematización
+print("Stemming:", stemmer.stem(word))  # Stemming
+```
+# Part of speech tagging
+
+```{python}
+from nltk import pos_tag
+pos_tags = pos_tag(tokens)
+print(pos_tags[:20]) # Imprime los primeros 20 tokens con sus etiquetas de parte de habla
+```
+
+# Remover las stop words (convirtiendo a minusculas para evitar problemas de mayusculas), eliminando números y signos de puntuación, y filtrando palabras con menos de 3 caracteres.
+```{python}
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [word.lower() for word in tokens if word.isalpha() and word.lower() not in stop_words and len(word) > 2]
+print(filtered_tokens[:20]) # Imprime los primeros 20 tokens filtrados
+
+```
+
+# Usar Bag of Words para contar la frecuencia de las palabras
+```{python}
+bow = {}
+for word in filtered_tokens:
+    if word in bow:
+        bow[word] += 1
+    else:
+        bow[word] = 1
+# Convertir el diccionario a un DataFrame para visualización
+bow_df = pd.DataFrame(list(bow.items()), columns=["word", "frequency"])
+# Visualizar las palabras más frecuentes usando Altair
+chart = (
+    alt.Chart(bow_df.sort_values(by="frequency", ascending=False).head(20))
+    .mark_bar()
+    .encode(x=alt.X("word", sort="-y"), y="frequency")
+    .properties(title="Top 20 Palabras Más Frecuentes")
+)
+chart
+```
+# Usar matplotlib para dibujar una nube de palabras
+```{python}
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(bow)
+plt.figure(figsize=(15, 7.5))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.title("Nube de Palabras")
+plt.show()
+```
+# Word cloud and bar chart side by side
+```{python}
+
+words = []
+types = []
+
+# Itera sobre cada entrada de la lista POS
+for p in pos_tags:
+    word = p[0].lower()  # obtener la palabra en minúsculas
+    tag = p[1]  # obtener la etiqueta gramatical
+
+    # Usamos 'stop_words' y aplicamos las reglas de limpieza previas (longitud > 2)
+    if word.isalpha() and word not in stop_words and len(word) > 2:
+        words.append(word)  # añadir palabra limpia a la lista
+        # clasificar el tipo según el prefijo de la etiqueta
+        if tag.startswith("N"):
+            types.append("Noun")
+        elif tag.startswith("V"):
+            types.append("Verb")
+        elif tag.startswith("J"):
+            types.append("Adjective")
+        elif tag.startswith("R"):
+            types.append("Adverb")
+        else:
+            types.append("Other")
+
+# Crear DataFrame
+df = pd.DataFrame({"word": words, "type": types})
+
+# Base de los dos subgráficos
+base = alt.Chart(df)
+
+# Selección por filtro (al hacer clic en una barra del primer gráfico)
+selection = alt.selection_point(fields=["type"])
+
+# Condición de opacidad: resaltar si está seleccionado
+opacity_condition = alt.condition(selection, alt.value(1), alt.value(0.1))
+
+# Gráfico 1: barras de frecuencia por tipo gramatical
+chart1 = (
+    base.mark_bar()
+    .encode(
+        alt.X("type", sort="-y"),  # ordenar de mayor a menor frecuencia
+        alt.Y("count()"),  # agregación correcta en Altair
+        opacity=opacity_condition,
+    )
+    .add_params(selection)
+)
+
+# Gráfico 2: barras de palabras, filtradas por la selección del gráfico 1
+chart2 = (
+    base.mark_bar()
+    .encode(
+        # ordenar palabras por frecuencia
+        alt.X("word", sort="-y"), alt.Y("count()")
+    )
+    .transform_filter(selection)
+    .transform_window(
+        rank="rank(count())", sort=[alt.SortField("count()", order="descending")]
+    )
+    .transform_filter(alt.datum.rank <= 20)
+)
+
+# Mostrar ambos gráficos lado a lado
+chart1 | chart2
+```

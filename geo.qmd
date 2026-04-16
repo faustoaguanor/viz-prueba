@@ -1,0 +1,374 @@
+---
+titulo: "Visualización geográfica"
+---
+
+# importar librerias de python
+```{python}
+import geopandas as gpd
+import pandas as pd
+import matplotlib.pyplot as plt
+```
+
+# cargar datos
+```{python}
+url = "https://naciscdn.org/naturalearth/110m/cultural/ne_110m_admin_0_countries.zip"
+gdf = gpd.read_file(url)
+gdf  = gdf[["NAME", "CONTINENT", "POP_EST", "geometry"]]
+
+```
+
+# Visualización df con altair
+```{python}
+import altair as alt 
+alt.data_transformers.disable_max_rows()
+alt.Chart(gdf).mark_geoshape().encode(
+    color = "CONTINENT:N",
+    tooltip = ["NAME:N", "POP_EST:Q"]
+).properties(
+    width = 800,
+    height = 400
+).project("naturalEarth1")  
+```
+# Cambiar de proyeccion 
+```{python}
+alt.Chart(gdf).mark_geoshape().encode(
+    color = "CONTINENT:N",
+    tooltip = ["NAME:N", "POP_EST:Q"]
+).properties(
+    width = 800,
+    height = 400
+).project("mercator")  
+```
+
+# Focus y Filtering
+## Filtrar desde el dataframe con geopandas
+```{python}
+gdf_america = gdf[gdf["CONTINENT"] == "North America"]
+alt.Chart(gdf_america).mark_geoshape().encode(
+    color = "CONTINENT:N",
+    tooltip = ["NAME:N", "POP_EST:Q"]
+).properties(
+    width = 800,
+    height = 400
+).project("mercator")   
+```
+## Filtrar desde altair
+```{python}
+alt.Chart(gdf).mark_geoshape().encode(
+    color = "CONTINENT:N",
+    tooltip = ["NAME:N", "POP_EST:Q"]
+).properties(
+    width = 800,
+    height = 400
+).project("mercator").transform_filter(
+    alt.datum.CONTINENT == "North America"
+)
+```
+## Especificar el scale y el translate a North America
+```{python}
+alt.Chart(gdf).mark_geoshape().encode(
+    color = "CONTINENT:N",
+    tooltip = ["NAME:N", "POP_EST:Q"]
+).properties(
+    width = 400,
+    height = 400    
+).project( scale = 200, translate = [320, 70])
+``` 
+# Cambiar el color de los paises (relleno y borde)
+```{python}
+alt.Chart(gdf).mark_geoshape(
+    fill = "lightblue",
+    stroke = "black"
+).encode(
+    tooltip = ["NAME:N", "POP_EST:Q"]
+).properties(
+    width = 400,
+    height = 400
+).project( scale = 200, translate = [320, 70])
+```
+
+# Mapear los puntos con geoCentroid de altair y el area del circulo con POP_EST
+```{python}
+basemap = alt.Chart(gdf).mark_geoshape(
+    fill="lightgray", stroke="white", strokeWidth=0.5
+)
+
+bubbles = (
+    alt.Chart(gdf)
+    .transform_calculate(
+        centroid=alt.expr.geoCentroid(None, alt.datum)
+    )
+    .mark_circle(stroke="black")
+    .encode(
+        longitude="centroid[0]:Q",
+        latitude="centroid[1]:Q",
+        size="POP_EST:Q",
+        tooltip=["NAME:N", "POP_EST:Q"],
+    )
+)
+
+(basemap + bubbles)
+```
+# Mapa coropleta con altair
+```{python}
+alt.Chart(gdf).mark_geoshape().encode(
+    color = "POP_EST:Q",
+    tooltip = ["NAME:N", "POP_EST:Q"]
+).properties(
+    width = 800,
+    height = 400
+).project("mercator").transform_lookup(
+    lookup = "NAME",
+    from_ = alt.LookupData(data = gdf, key = "NAME", fields = ["POP_EST"])
+)
+```
+
+# Enlazar dos archivos: DS y Geopandas
+
+```{python}
+import requests
+import tempfile, os
+from vega_datasets import data
+
+response = requests.get(data.us_10m.url)
+with tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode='wb') as f:
+    f.write(response.content)
+    tmp_path = f.name
+
+gdf_us_counties = gpd.read_file(tmp_path, layer="counties")
+os.unlink(tmp_path)
+
+gdf_us_counties.head()
+```
+# Enlazar dos archivos leer el topoJSON con altair
+```{python}
+gdf_us_counties = alt.topo_feature(data.us_10m.url, "counties")
+gdf_us_counties
+gdf_us_unemployment= data.unemployment()
+gdf_us_unemployment.head()
+```
+
+# Merge de los dos dataset geojson y dataset unemployment
+```{python}
+alt.Chart(gdf_us_counties).mark_geoshape().encode(
+    color="rate:Q",
+    tooltip=["id:N", "rate:Q"]
+).properties(
+    width=800,
+    height=400
+).project("albersUsa").transform_lookup(
+    lookup="id",
+    from_=alt.LookupData(data=gdf_us_unemployment, key="id", fields=["rate"])
+)
+```
+
+# Repetir el mapa con population, engineers y hurracanes
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+source = data.population_engineers_hurricanes.url
+variables = ["population", "engineers", "hurricanes"]
+
+# Mapa con repeat('row') en el color de altair
+alt.Chart(states).mark_geoshape().encode(
+    color=alt.Color(alt.repeat("row"), type="quantitative"),
+).properties(
+    width=400,
+    height=300
+).project("albersUsa").transform_lookup(
+    lookup="id",
+    from_=alt.LookupData(data=source, key="id", fields=variables)
+).repeat(
+    row=variables
+).resolve_scale(
+    color="independent"
+)
+
+```
+
+# Mapa de casos de asma en USA con altair
+## Cargar datos
+```{python}
+asthma = pd.read_csv("https://raw.githubusercontent.com/erickedu85/dataset/master/us_population_coordinates_asthma-cases.csv")
+asthma.head()
+``` 
+## Mapa coropletas de la población con altair
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+alt.Chart(states).mark_geoshape().encode(
+    color=alt.Color("population:Q"),
+    tooltip=["id:N", "population:Q"]
+).properties(
+    width=800,
+    height=400
+).project("albersUsa").transform_lookup(
+    lookup="id",
+    from_=alt.LookupData(data=asthma, key="id", fields=["population"])
+)
+```
+## Usar el mapa base de USA y mapear los casos de asma  
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+basemap = (
+    alt.Chart(states)
+    .mark_geoshape(fill="lightgray", stroke="white", strokeWidth=0.5)
+    .project("albersUsa")
+)
+points = (
+    alt.Chart(asthma)
+    .mark_circle(stroke="black", strokeWidth=0.6)
+    .encode(
+        longitude="longitude:Q",
+        latitude="latitude:Q",
+        size="number_of_asthma_cases:Q",
+        tooltip=["id:N", "number_of_asthma_cases:Q"],
+    )
+)
+(basemap + points)
+```
+
+## Usar el mapa base de USA y mapear los casos de asma per capita como circulos 
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+# Calcular el numero de casos de asma per capita
+asthma["number_of_asthma_cases_per_capita"] = asthma["number_of_asthma_cases"] / asthma["population"]
+
+basemap = (
+    alt.Chart(states)
+    .mark_geoshape(fill="lightgray", stroke="white", strokeWidth=0.5)
+    .project("albersUsa")
+)
+points = (
+    alt.Chart(asthma)
+    .mark_circle(stroke="black", strokeWidth=0.6)
+    .encode(
+        longitude="longitude:Q",
+        latitude="latitude:Q",
+        size="number_of_asthma_cases_per_capita:Q",
+        tooltip=["id:N", "number_of_asthma_cases_per_capita:Q"],
+    )
+)   
+(basemap + points)
+```
+## Mapa de coropletas con el numero de casos de asma per capita
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+alt.Chart(states).mark_geoshape().encode(
+    color=alt.Color("number_of_asthma_cases_per_capita:Q"),
+    tooltip=["id:N", "number_of_asthma_cases_per_capita:Q"]
+).properties(
+    width=800,
+    height=400
+).project("albersUsa").transform_lookup(
+    lookup="id",
+    from_=alt.LookupData(data=asthma, key="id", fields=["number_of_asthma_cases_per_capita"])
+)   
+```
+## Mapa de coropletas con el numero de casos de asma per capita con la escala comenzando en 0 
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+alt.Chart(states).mark_geoshape().encode(
+    color=alt.Color("number_of_asthma_cases_per_capita:Q", scale=alt.Scale(
+        zero=True)),
+    tooltip=["id:N", "number_of_asthma_cases_per_capita:Q"]
+).properties(
+    width=800,
+    height=400
+).project("albersUsa").transform_lookup(
+    lookup="id",
+    from_=alt.LookupData(data=asthma, key="id", fields=[  "number_of_asthma_cases_per_capita"])
+)
+```
+# Concatenación de mapa coropletas de casos de asma per capita y gráfico de barras con el numero de casos de asma per capita (con &)
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+map = alt.Chart(states).mark_geoshape().encode(
+    color=alt.Color("number_of_asthma_cases_per_capita:Q", scale=alt.Scale(
+        zero=True)),
+    tooltip=["id:N", "number_of_asthma_cases_per_capita:Q"]
+).properties(
+    width=800,
+    height=400
+).project("albersUsa").transform_lookup(
+    lookup="id",
+    from_=alt.LookupData(data=asthma, key="id", fields=[  "number_of_asthma_cases_per_capita"])
+)
+bar = alt.Chart(asthma).mark_bar().encode(
+    x="state:N",
+    y=alt.Y("number_of_asthma_cases_per_capita:Q", scale=alt.Scale(zero=True)),
+    tooltip=["id:N", "number_of_asthma_cases_per_capita:Q"]
+).transform_filter(
+    alt.datum.number_of_asthma_cases_per_capita > 0
+).properties(
+    width=800,
+    height=400
+)
+map & bar
+```
+# Concatenación de mapa coropletas de casos de asma per capita y gráfico de barras con el numero de casos de asma per capita (con |)
+```{python}
+map | bar
+```
+# Concatenación de mapa de coropletas, circulos y gráfico de barras con casos de asma per capita (con & y |) 
+```{python}
+states = alt.topo_feature(data.us_10m.url, "states")
+map = (
+    alt.Chart(states)
+    .mark_geoshape()
+    .encode(
+        color=alt.Color("number_of_asthma_cases_per_capita:Q"),
+        tooltip=["id:N", "number_of_asthma_cases_per_capita:Q"],
+    )
+    .properties(title="Mapa de casos de asma per capita en USA", width=200, height=150)
+    .project("albersUsa")
+    .transform_lookup(
+        lookup="id",
+        from_=alt.LookupData(
+            data=asthma, key="id", fields=["number_of_asthma_cases_per_capita"]
+        ),
+    )
+)
+
+
+points = (
+    alt.Chart(asthma)
+    .mark_circle(stroke="black", strokeWidth=0.6)
+    .encode(
+        longitude="longitude:Q",
+        latitude="latitude:Q",
+        size="number_of_asthma_cases:Q",
+        tooltip=["id:N", "number_of_asthma_cases:Q"],
+    )
+    .properties(title="Casos de asma en USA", width=200, height=150)
+    .project("albersUsa")
+    .transform_filter(alt.datum.number_of_asthma_cases > 0)
+)
+
+basemap = (
+    alt.Chart(states)
+    .mark_geoshape(fill="lightgray", stroke="white", strokeWidth=0.5)
+    .encode(tooltip=["id:N"])
+    .properties(width=200, height=150)
+    .project("albersUsa")
+    .transform_lookup(
+        lookup="id",
+        from_=alt.LookupData(
+            data=asthma, key="id", fields=["number_of_asthma_cases_per_capita"]
+        ),
+    )
+)
+
+
+bar = (
+    alt.Chart(asthma)
+    .mark_bar()
+    .encode(
+        y=alt.Y("number_of_asthma_cases_per_capita:Q"),
+        x=alt.X("state:N", sort="-y"),
+        tooltip=["id:N", "number_of_asthma_cases_per_capita:Q"],
+        color=alt.Color("number_of_asthma_cases_per_capita:Q"),
+    )
+    .transform_filter(alt.datum.number_of_asthma_cases_per_capita > 0)
+    .properties(title="Casos de asma per capita en USA", width=500, height=300)
+)
+(map | (basemap + points)) & bar
+```
