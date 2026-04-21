@@ -24,9 +24,6 @@ website:
         text: Vizualización de texto
       - href: geo.qmd
         text: Vizualización geográfica
-      - href: grafos.qmd
-        text: Vizualización de grafos
-
 format:
   html:
     theme: sandstone
